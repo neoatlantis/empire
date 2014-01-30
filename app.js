@@ -12,4 +12,6 @@
  * UNIX-Sockets. Otherwise, we may use HTTPS to connect to other servers.
  */
 
-require('./lib/root'); 
+require('./lib/root');
+
+var config = $.global('config', $.config.createConfig('./config/'));
