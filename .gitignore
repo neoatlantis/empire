@@ -1,3 +1,5 @@
 node_modules
 *.swp
 *.swo
+config/*
+!config/index.json
