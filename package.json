@@ -5,6 +5,7 @@
         "express": "3.x",
         "async": "*",
         "jade": "*",
-        "mongodb": "*"
+        "mongodb": "*",
+        "http-proxy": "*"
     }
 }
