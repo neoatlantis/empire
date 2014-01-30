@@ -15,3 +15,19 @@
 require('./lib/root');
 
 var config = $.global('config', $.config.createConfig('./config/'));
+
+String("NeoAtlantis Website Startup.").NOTICE();
+
+if($.global('config')('https')){
+    String("Starting HTTPS server...").NOTICE();
+} else {
+    String("No HTTPS settings read. Omit HTTPS setting up.").WARNING();
+};
+
+if($.global('config')('http')){
+    String("Starting HTTP server...").NOTICE();
+    var serverHTTP = $.net.HTTP.server($.global('config')('http-port'));
+
+} else {
+    String("No HTTP settings read. Omit HTTP setting up.").WARNING();
+};
