@@ -1,8 +1,6 @@
 module.exports = function(packet, dest){
     // proxy the packet to a destination. when error, set packet to output
     // errors.
-    console.log(dest);
-
     var httpOptions = {};
     if('unix-socket' == dest.type)
         httpOptions = {
@@ -17,16 +15,23 @@ module.exports = function(packet, dest){
     httpOptions.headers = packet.request.headers;
     httpOptions.path = packet.request.url;
 
+    console.log(httpOptions);
+
     // create a request
     var subsiteRequest = $.nodejs.http.request(httpOptions);
 
     // bind the incoming request to subsite
-    subsiteRequest.on('connect', function(subsiteResponse, socket, head){
+    subsiteRequest.on('response', function(subsiteResponse){
+        packet.response.writeHead(
+            subsiteResponse.statusCode, 
+            subsiteResponse.headers
+        );
+
         subsiteResponse.on('data', function(chunk){
             packet.response.write(chunk);
         });
-        subsiteResponse.on('end', function(chunk){
-            packet.response.end(chunk);
+        subsiteResponse.on('end', function(){
+            packet.response.end();
         });
         subsiteResponse.on('error', function(err){
             packet.emit('error', err);
@@ -40,8 +45,8 @@ module.exports = function(packet, dest){
     packet.request.on('data', function(chunk){
         subsiteRequest.write(chunk);
     });
-    packet.request.on('end', function(chunk){
-        subsiteRequest.end(chunk);
+    packet.request.on('end', function(){
+        subsiteRequest.end();
     });
 
 
