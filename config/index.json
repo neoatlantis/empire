@@ -2,5 +2,7 @@
     {"name": "http", "default": true},
     {"name": "https", "default": false},
 
-    {"name": "http-port", "default": 80}
+    {"name": "http-port", "default": 80},
+
+    {"name": "subsites", "type": "json"}
 ]
