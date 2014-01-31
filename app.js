@@ -13,21 +13,27 @@
  */
 
 require('./lib/root');
+var mainLogic = require('./mainsite');
 
 var config = $.global('config', $.config.createConfig('./config/'));
 
 String("NeoAtlantis Website Startup.").NOTICE();
 
 if($.global('config')('https')){
-    String("Starting HTTPS server...").NOTICE();
-} else {
+//    String("Starting HTTPS server...").NOTICE();
+//} else {
     String("No HTTPS settings read. Omit HTTPS setting up.").WARNING();
 };
 
 if($.global('config')('http')){
-    String("Starting HTTP server...").NOTICE();
-    var serverHTTP = $.net.HTTP.server($.global('config')('http-port'));
-
+    var httpPort = $.global('config')('http-port');
+    String("Starting HTTP server on port [" + httpPort + "].").NOTICE();
+    $.global(
+        'server-http', 
+        $.net.HTTP.server(httpPort)
+    );
+    $.global('server-http').start();
+    $.global('server-http').on('data', mainLogic);
 } else {
     String("No HTTP settings read. Omit HTTP setting up.").WARNING();
 };
