@@ -1,4 +1,5 @@
-var responsePages = require('./response.pages.js');
+$.global('responser', require('./response.pages.js'));
+$.global('forwarder', require('./forward.js'));
 
 module.exports = function(packet){
     var pathname = packet.url.pathname;
@@ -9,8 +10,10 @@ module.exports = function(packet){
         subsite = $.global('config')('subsites')[subsiteName];
 
     if(undefined == subsite)
-        return packet.response.end(responsePages(404));
+        return packet.response.end(
+            $.global('responser')(404)
+        );
 
     // forward
-    packet.response.end(JSON.stringify(subsite));
+    $.global('forwarder')(packet, subsite);
 };
